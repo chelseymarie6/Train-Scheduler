@@ -1,0 +1,24 @@
+body {
+	background: url("../images/train-station.jpg") no-repeat center center fixed;
+	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+	background-size: cover;
+	box-sizing: border-box;
+}
+
+.jumbotron {
+	box-sizing: border-box;
+	background-color: white;
+	opacity: 0.7;
+}
+
+.panel-primary {
+    opacity: 0.8;
+}
+
+.panel-primary>.panel-heading {
+    background-color: #e6ac00;
+    border-color: #ffcc00;
+    color: 	#303030;
+}
