@@ -1,6 +1,6 @@
 //JavaScript logic for Train Scheduler
-
-// Initialize Firebase
+//Variables
+// initialize Firebase
 var config = {
     apiKey: "AIzaSyDMId_Mrg9yTJFpUCTp88DxHf0fSOplE40",
     authDomain: "i-love-trains-c1189.firebaseapp.com",
@@ -12,6 +12,7 @@ var config = {
 
 firebase.initializeApp(config);
 
+//database
 var database = firebase.database();
 //for HTML
 var name = "";
@@ -19,12 +20,12 @@ var destination = "";
 var firstTrain ="";
 var frequency ="";
 //for time conversions
-var nextTrain = "";
-var nextTrainFormat = "";
-var minAway = "";
 var firstTrainConvert = "";
 var currentTime = "";
 var differenceTime = "";
+var minAway = "";
+var nextTrain = "";
+var nextTrainFormat = "";
 var timeRemain = "";
 var minToTrain = "";
 
@@ -38,8 +39,13 @@ $(document).ready(function (){
         frequency = $("#frequency-input").val().trim();
         
         //code for times - uses moment.js
-        
-        
+        firstTrainConvert = moment(firstTrain, "hh:mm").subtract (1, "years");
+        currentTime = moment();
+        differenceTime = moment().diff(moment(firstTrainConvert), "minutes");
+        timeRemain = differenceTime % frequency;
+        minToTrain = frequency - timeRemain;
+        nextTrain = moment().add(minToTrain, "minutes");
+        nextTrainFormat = moment(nextTrain).format("hh:mm");
         
         // code for handling push
         database.ref().push({
@@ -63,28 +69,9 @@ $(document).ready(function (){
 
     database.ref().on("child_added", function(childSnapshot){
 
-        $("#train-scheduler").append("<tr class = 'table-row'" + childSnapshot + "'" + ">" + "<td>" + childSnapshot.val().name + "</td>");
+        $("#train-scheduler").append("<tr class = 'table-row'" + childSnapshot + "'" + ">" + "<td>" + childSnapshot.val().name + "</td>" + "<td>" + childSnapshot.val().destination + "</td>" + "<td>" + childSnapshot.val().frequency + "</td>" + "<td>" + childSnapshot.val().nextTrainFormat + "</td>" + "<td>" + childSnapshot.val().minToTrain + "</td>");
     }, function(errorObject) {
         console.log("Errors handles: " + errorObject.code);
     });
-
-    // database.ref().on("child_added", function(childSnapshot)  {
-    //     var employee = childSnapshot.val().employee;
-    //     var role = childSnapshot.val().role;
-    //     var startDate = childSnapshot.val().startDate;
-    //     var monthlyRate = childSnapshot.val().monthlyRate;
-    //     // var monthsWorked = (moment(startDate, "MM/DD/YY").fromNow());
-    //     // var monthsWorked = moment(startDate).diff(moment(), "months");
-    //     var monthsWorked = startDate.diff(moment("09/14/17", "months"));
-    //     var total = 200
-        
-    //     console.log(childSnapshot.val().employee);
-    //     console.log(childSnapshot.val().role);
-    //     console.log(childSnapshot.val().startDate);
-    //     console.log(childSnapshot.val().monthlyRate);
-    //     console.log(monthsWorked);
-    //     $("#table-rows").append("<tr>" + "<td>" + employee + "</td><td>" + role + "</td><td>" + startDate + "</td><td>" + monthsWorked + "</td><td>" + monthlyRate + "</td><td>" + total + "</td></tr>");
-                                    
-    // });
 
 });
