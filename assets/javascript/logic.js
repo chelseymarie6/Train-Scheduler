@@ -69,7 +69,7 @@ $(document).ready(function (){
 
     database.ref().on("child_added", function(childSnapshot){
 
-        $("#train-scheduler").append("<tr class = 'table-row'" + childSnapshot + "'" + ">" + "<td>" + childSnapshot.val().name + "</td>" + "<td>" + childSnapshot.val().destination + "</td>" + "<td>" + childSnapshot.val().frequency + "</td>" + "<td>" + childSnapshot.val().nextTrainFormat + "</td>" + "<td>" + childSnapshot.val().minToTrain + "</td>" +  "<td class='col-xs-1'>" + "<input type='submit' value='remove train' class='remove-train btn btn-primary btn-sm'>" + "</td>" + "</tr>");
+        $("#train-scheduler").append("<tr class = 'table-row'" + childSnapshot + "'" + ">" + "<td>" + childSnapshot.val().name + "</td>" + "<td>" + childSnapshot.val().destination + "</td>" + "<td>" + childSnapshot.val().frequency + "</td>" + "<td>" + childSnapshot.val().nextTrainFormat + "</td>" + "<td>" + childSnapshot.val().minToTrain + "</td>" +  "<td class='col-xs-1'>" + "<input type='submit' value='Remove Train' class='remove-train btn btn-primary btn-sm'>" + "</td>" + "</tr>");
     }, function(errorObject) {
         console.log("Errors handles: " + errorObject.code);
     });
