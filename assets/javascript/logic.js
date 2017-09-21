@@ -28,6 +28,8 @@ var nextTrain = "";
 var nextTrainFormat = "";
 var timeRemain = "";
 var minToTrain = "";
+//for remove train
+var getKey = "";
 
 $(document).ready(function (){
 
@@ -39,14 +41,15 @@ $(document).ready(function (){
         frequency = $("#frequency-input").val().trim();
         
         //code for times - uses moment.js
-        firstTrainConvert = moment(firstTrain, "hh:mm").subtract (1, "years");
-        currentTime = moment();
-        differenceTime = moment().diff(moment(firstTrainConvert), "minutes");
+        currentTime = moment();//this gives us the current time
+
+        firstTrainConvert = moment(firstTrain, "hh:mm").subtract (1, "y");
+        differenceTime = moment().diff(moment(firstTrainConvert), "m");
         timeRemain = differenceTime % frequency;
         minToTrain = frequency - timeRemain;
-        nextTrain = moment().add(minToTrain, "minutes");
+        nextTrain = moment().add(minToTrain, "m");
         nextTrainFormat = moment(nextTrain).format("hh:mm");
-        
+
         // code for handling push
         database.ref().push({
             name: name,
@@ -62,16 +65,20 @@ $(document).ready(function (){
         $("#destination-input").val("");
         $("#first-train-input").val("");
         $("#frequency-input").val("");
-
-        console.log(name);
- 
     });
 
     database.ref().on("child_added", function(childSnapshot){
 
-        $("#train-scheduler").append("<tr class = 'table-row'" + childSnapshot + "'" + ">" + "<td>" + childSnapshot.val().name + "</td>" + "<td>" + childSnapshot.val().destination + "</td>" + "<td>" + childSnapshot.val().frequency + "</td>" + "<td>" + childSnapshot.val().nextTrainFormat + "</td>" + "<td>" + childSnapshot.val().minToTrain + "</td>");
+        $("#train-scheduler").append("<tr class = 'table-row'" + childSnapshot + "'" + ">" + "<td>" + childSnapshot.val().name + "</td>" + "<td>" + childSnapshot.val().destination + "</td>" + "<td>" + childSnapshot.val().frequency + "</td>" + "<td>" + childSnapshot.val().nextTrainFormat + "</td>" + "<td>" + childSnapshot.val().minToTrain + "</td>" +  "<td class='col-xs-1'>" + "<input type='submit' value='remove train' class='remove-train btn btn-primary btn-sm'>" + "</td>" + "</tr>");
     }, function(errorObject) {
         console.log("Errors handles: " + errorObject.code);
     });
+
+    $("body").on("click", ".remove-train", function (){
+        $(this).closest("tr").remove();
+        getKey = $(this).parent().parent().attr("id");
+        database.child(getKey).remove();
+    });
+
 
 });
